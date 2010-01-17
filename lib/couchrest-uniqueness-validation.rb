@@ -1,4 +1,6 @@
 # Based on original validators in CouchRest::Validation
+require 'couchrest/mixins/validation'
+
 module CouchRest
   module Validation
     
