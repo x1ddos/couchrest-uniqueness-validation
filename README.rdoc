@@ -1,6 +1,30 @@
 = couchrest-uniqueness-validation
 
-Description goes here.
+Validates that the specified attribute is unique across documents with the same 
+couchrest-type using a view.
+
+@note
+  You have to define a design doc view.
+@see http://rdoc.info/rdoc/couchrest/couchrest/blob/1b34fe4b60694683e98866a51c2109c1885f7e42/CouchRest/Mixins/Views/ClassMethods.html#view_by-instance_method for more details about views.
+
+@example [Usage]
+
+  class User
+  
+    property :nickname
+    property :login
+
+    view_by :nickname
+
+    # assumes that a view :by_nickname is present
+    validates_uniqueness_of :nickname
+
+    # uses a different from default view 
+    validates_uniqueness_of :login, :view => 'my_custom_view'
+
+    # a call to valid? will return false unless no other document exists with
+    # the same couchrest-type, nickname and login
+  end
 
 == Note on Patches/Pull Requests
  
@@ -14,4 +38,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 alex. See LICENSE for details.
+Copyright (c) 2010 alex@digns.com. See LICENSE for details.

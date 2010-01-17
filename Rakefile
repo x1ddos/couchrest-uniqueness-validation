@@ -6,10 +6,11 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "couchrest-uniqueness-validation"
     gem.summary = %Q{adds validates_uniqueness_of validator to CouchRest::Validation}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.description = %Q{adds uniquness validation by using a design doc view}
     gem.email = "alex@digns.com"
     gem.homepage = "http://github.com/crhym3/couchrest-uniqueness-validation"
     gem.authors = ["alex"]
+    gem.add_dependency("couchrest", ">= 0.34")
     gem.add_development_dependency "rspec", ">= 1.2.9"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
