@@ -1,16 +1,23 @@
-= couchrest-uniqueness-validation
+= Couchrest Uniqueness Validation
+
+This is a simple add-on to {couchrest}[http://github.com/couchrest/couchrest] gem
 
 Validates that the specified attribute is unique across documents with the same 
 couchrest-type using a view.
 
-@note
-  You have to define a design doc view.
-@see http://rdoc.info/rdoc/couchrest/couchrest/blob/1b34fe4b60694683e98866a51c2109c1885f7e42/CouchRest/Mixins/Views/ClassMethods.html#view_by-instance_method for more details about views.
+== Install
 
-@example [Usage]
-
-  class User
+  gem install couchrest-uniqueness-validation
   
+== Usage
+
+  require 'rubygems'
+  require 'couchrest'
+  require 'couchrest-uniqueness-validation'
+
+  class User < CouchRest::ExtendedDocument
+    include CouchRest::Validation
+    
     property :nickname
     property :login
 
@@ -26,9 +33,16 @@ couchrest-type using a view.
     # the same couchrest-type, nickname and login
   end
 
+Note: at least two views should exist in the User design doc for this example to work - 
+:by_nickname and :my_custom_view.
+
+See {CouchRest Views docs}[http://rdoc.info/rdoc/couchrest/couchrest/blob/1b34fe4b60694683e98866a51c2109c1885f7e42/CouchRest/Mixins/Views/ClassMethods.html#view_by-instance_method] 
+for more info on views.
+  
+
 == Note on Patches/Pull Requests
  
-* Fork the project.
+* Fork the {project}[http://github.com/crhym3/couchrest-uniqueness-validation].
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a
   future version unintentionally.
