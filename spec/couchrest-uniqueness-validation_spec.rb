@@ -68,7 +68,28 @@ describe CouchRest::Validation::UniquenessValidator do
     it "should work" do
       SomeOtherUniqueDoc.should_receive(:view).
         with(:my_custom_view, hash_including(:key => @some_doc.another_prop, :limit => 1, :include_docs => false))
-      @some_doc.valid?
+      @some_doc.should be_valid
+    end
+  end
+
+  describe "using downcase" do
+    class YetAnotherUniqueDoc < CouchRest::ExtendedDocument
+      include CouchRest::Validation
+      use_database SPEC_COUCH
+
+      property :another_prop
+      validates_uniqueness_of :another_prop, :downcase => true
+    end
+
+    before(:each) do
+      @some_doc = YetAnotherUniqueDoc.new :another_prop => 'Some Property Value'
+      YetAnotherUniqueDoc.stub(:view).and_return({'rows' => []})
+    end
+
+    it "should work" do
+      YetAnotherUniqueDoc.should_receive(:view).
+        with(:by_another_prop, hash_including(:key => @some_doc.another_prop.downcase, :limit => 1, :include_docs => false))
+      @some_doc.should be_valid
     end
   end
 end

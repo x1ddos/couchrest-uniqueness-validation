@@ -9,6 +9,7 @@ module CouchRest
         super
         @field_name, @options = field_name, options
         @options[:view] ||= "by_#{@field_name}"
+        @options[:downcase] ||= false
       end
       
       def call(target)
@@ -23,6 +24,7 @@ module CouchRest
       
       def unique?(target)
         value = target.validation_property_value(@field_name)
+        value.downcase! if @options[:downcase]
         existing_docs = target.class.view(@options[:view].to_sym, :key => value, :limit => 1, :include_docs => false)['rows']
         
         # normal case when target.new_document? == true and
@@ -59,7 +61,11 @@ module CouchRest
       #     validates_uniqueness_of :nickname
       #
       #     # uses a different from default view 
-      #     validates_uniqueness_of :login, :view => 'my_custom_view'
+      #     validates_uniqueness_of :login, :view => 'by_my_custom_view'
+      #
+      #     # or, you can do a case insensitive uniqueness validation
+      #     validates_uniqueness_of :login, :view => 'by_case_insensitive_login_view', :downcase => true
+      #     # view_by :case_insensitive_login_view, :map => "function(doc) {if (doc.login) {emit(doc.title.toLowerCase(), 1);}}"
       #
       #     # a call to valid? will return false unless no other document exists with
       #     # the same couchrest-type, nickname and login
