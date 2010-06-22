@@ -24,7 +24,7 @@ module CouchRest
       
       def unique?(target)
         value = target.validation_property_value(@field_name)
-        value.downcase! if @options[:downcase]
+        value.downcase! if @options[:downcase] && !value.blank?
         existing_docs = target.class.view(@options[:view].to_sym, :key => value, :limit => 1, :include_docs => false)['rows']
         
         # normal case when target.new_document? == true and

@@ -91,5 +91,12 @@ describe CouchRest::Validation::UniquenessValidator do
         with(:by_another_prop, hash_including(:key => @some_doc.another_prop.downcase, :limit => 1, :include_docs => false))
       @some_doc.should be_valid
     end
+
+    it "works for nil values" do
+      @some_doc.another_prop = nil
+      YetAnotherUniqueDoc.should_receive(:view).
+        with(:by_another_prop, hash_including(:key => nil, :limit => 1, :include_docs => false))
+      lambda{@some_doc.valid?}.should_not raise_error
+    end
   end
 end
