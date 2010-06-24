@@ -92,11 +92,19 @@ describe CouchRest::Validation::UniquenessValidator do
       @some_doc.should be_valid
     end
 
-    it "works for nil values" do
+    it "should work for nil values" do
       @some_doc.another_prop = nil
       YetAnotherUniqueDoc.should_receive(:view).
         with(:by_another_prop, hash_including(:key => nil, :limit => 1, :include_docs => false))
       lambda{@some_doc.valid?}.should_not raise_error
+    end
+
+    it "should not have a side effect of the field being left downcased afterwards" do
+      YetAnotherUniqueDoc.should_receive(:view).
+        with(:by_another_prop, hash_including(:key => @some_doc.another_prop.downcase, :limit => 1, :include_docs => false))
+      @some_doc.should be_valid
+      @some_doc.another_prop.should == 'Some Property Value'
+      @some_doc.another_prop.should_not == 'some property value'
     end
   end
 end
